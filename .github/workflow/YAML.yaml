@@ -14,9 +14,9 @@ jobs:
     - name: Mirror Github to Gitee with white list
       uses: Yikun/hub-mirror-action@master
       with:
-        src: github/JasonkayZK
-        dst: gitee/jasonkay
+        src: github/tianxinying-xy
+        dst: gitee/txy-123
         dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
         dst_token:  ${{ secrets.GITEE_TOKEN }}
-        static_list: 'JasonkayZK.github.io'
+        static_list: 'Synchronous-library'
         force_update: true
