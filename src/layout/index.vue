@@ -57,14 +57,13 @@ const autoWidth = computed(()=>{
 .layout{
   display: flex;
   height: 100vh;
+  overflow: hidden;
   .el-header{
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
-    background-color: #b3c0d1;
+    background-color: #fff;
     color: var(--el-text-color-primary);
-    text-align: center;
-    line-height: 60px;
   }
 
   .el-footer{

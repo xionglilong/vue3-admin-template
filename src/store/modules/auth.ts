@@ -43,7 +43,7 @@ export const authStore:Module<AuthState,RootState> = {
       
       login(requestUser).then(result=>{
         console.log(result);
-        debugger
+        // debugger
         state.userInfo = result.data
         commit('addToken',result.data.token)
         localStorage.setItem('token',result.data.token)

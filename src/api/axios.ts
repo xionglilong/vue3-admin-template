@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
 })
 // response 拦截器
 axiosInstance.interceptors.response.use(response=>{
-  debugger
+  // debugger
   const res = response.data
   if(res.code === 200){
     return res

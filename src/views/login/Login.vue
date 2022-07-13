@@ -11,18 +11,23 @@
         <h3>vue3-admin-template</h3>
       </header>
 
-      <el-form :model="loginForm" :rules="loginRules">
-        <el-form-item props="username">
+      <el-form :model="loginForm" :rules="loginRules" >
+        <el-form-item prop="username">
+              <el-icon>
+                <user />
+              </el-icon>
           <el-input placeholder="username" v-model="loginForm.username" type="text"></el-input>
         </el-form-item>
-        <el-form-item props="password">
+        <el-form-item prop="password">
+            <el-icon>
+              <lock />
+            </el-icon>
           <el-input placeholder="password" v-model="loginForm.password" type="password"></el-input>
         </el-form-item>
-        <el-form-item props="verifyCode" class="verify-item">
+        <el-form-item prop="verifyCode" class="verify-item">
           <el-input placeholder="verifyCode" v-model="loginForm.verifyCode" type="text" style="width: 40%; display: inline-block; border: 1px solid rgba(255, 255, 255, 0.1)"></el-input>
           <div style="margin-left: 10px; display: inline-block; height: 40px">
-            <img :src="codeUrl" @click="getValidaCode"
-            style="margin-bottom: -12px; width: 100%; height: 100%; object-fit: cover" />
+            <img :src="codeUrl" @click="getValidaCode" style="margin-bottom: -12px; width: 100%; height: 100%; object-fit: cover" />
           </div>
         </el-form-item>
         <el-form-item style="border: none; background: none">
@@ -34,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import { getCode ,login } from '@/api/Auth'
+import { getCode, login } from '@/api/Auth'
 import { onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router';
-import { useStore } from '@/store';
+import { useRouter } from 'vue-router'
+import { useStore } from '@/store'
 
 const store = useStore()
 const router = useRouter()
@@ -95,26 +100,25 @@ const loginRules = reactive({
   ],
 })
 // token 登录
-const handleToken = ()=>{
+const handleToken = () => {
   const token = localStorage.getItem('token')
-  if(token != null){
-    store.dispatch('authStore/loginByToken',token)
+  if (token != null) {
+    store.dispatch('authStore/loginByToken', token)
   }
 }
 // 登录
 const handleLogin = () => {
-    // login(loginForm).then(result=>{
-    //   if(result.data.token){
-    //     router.push({path:'/index'})
-    //   }
-    // })
-   store.dispatch('authStore/login',loginForm)
+  // login(loginForm).then(result=>{
+  //   if(result.data.token){
+  //     router.push({path:'/index'})
+  //   }
+  // })
+  store.dispatch('authStore/login', loginForm)
 }
 
-
 // 获取验证码
-const getValidaCode = ()=>{
-    getCode().then((res) => {
+const getValidaCode = () => {
+  getCode().then((res) => {
     codeUrl.value = res.data.image
     loginForm.uuid = res.data.uuid
   })
@@ -161,7 +165,7 @@ onMounted(() => {
     background: url('@/assets/login/login_form.png');
     background-size: 100% 100%;
     border-radius: 10px;
-    box-shadow: 0 2px 8px 0 rgba(224, 24, 9, 0.06);
+    box-shadow: 0 2px 8px 0 rgba(7, 17, 27, 0.06);
     opacity: '0.2';
 
     header {
@@ -182,14 +186,30 @@ onMounted(() => {
       }
     }
     .el-input {
+      display: inline-block;
+      height: 44px;
+      width: 85%;
+
+      .el-input__wrapper{
+        width: 100%;
+        background-color: transparent;
+        cursor: default;
+        //border-radius: 0%;
+        box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+      }
+      .el-input__inner {
+      cursor: default !important;
+    }
       input {
         height: 44px;
-        background: transparent;
-
-        padding: 12px 5px 12px 50px;
+        background-color: transparent;
+        border: 0px;
+        border-radius: 0px;
+        padding: 12px 5px 12px 20px;
         color: $lightGray;
         caret-color: $loginCursorColor;
         -webkit-appearance: none;
+        margin-left: 10px;
 
         &:-webkit-autofill {
           box-shadow: 0 0 0px 1000px $loginBg inset !important;
@@ -202,7 +222,79 @@ onMounted(() => {
       display: flex;
       flex-wrap: nowrap;
       border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.1);
       color: #454545;
+      padding-left: 10px;
+    }
+
+    .verify-item {
+      padding-left: 0%;
+      border: none;
+      background: none;
+    }
+  }
+
+  .tips {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: $darkGray;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+  }
+
+  .title-container {
+    position: relative;
+
+    .title {
+      font-size: 26px;
+      color: $lightGray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .set-language {
+      color: #fff;
+      position: absolute;
+      top: 3px;
+      font-size: 18px;
+      right: 0px;
+      cursor: pointer;
+    }
+  }
+
+  .show-pwd {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 16px;
+    color: $darkGray;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .thirdparty-button {
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+  }
+
+  @media only screen and (max-width: 470px) {
+    .thirdparty-button {
+      display: none;
     }
   }
 }
