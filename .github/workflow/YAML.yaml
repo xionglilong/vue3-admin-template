@@ -1,9 +1,14 @@
 on:
   workflow_dispatch:
+  push:
+      branches:
+	-  main
+	- "release/**"
+	-  dev
   schedule:
     - cron: '0 1 * * *'
 
-name: Mirror GitHub Selected Repos to Gitee
+name: Mirror Aliyun Selected Repos to Github
 jobs:
   run:
     name: Run
@@ -11,11 +16,11 @@ jobs:
     steps:
     - name: Checkout source codes
       uses: actions/checkout@v2
-    - name: Mirror Github to Gitee with white list
+    - name: Mirror Aliyun to Github with white list
       uses: Yikun/hub-mirror-action@master
       with:
-        src: aliyun/xionglilonggithub/tianxinying-xy
-        dst: aliyun/xionglilong
+        src: aliyun/dingtalk_xjmmix
+        dst: github/tianxinying-xy
         dst_key: ${{ secrets.ALIYUN_PRIVATE_KEY }}
         dst_token:  ${{ secrets.ALIYUN_TOKEN }}
         static_list: 'Synchronous-library.github.io'
