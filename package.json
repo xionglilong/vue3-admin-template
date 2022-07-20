@@ -11,6 +11,7 @@
     "@element-plus/icons": "^0.0.11",
     "axios": "^0.27.2",
     "element-plus": "^2.2.8",
+    "screenfull": "^6.0.2",
     "vue": "^3.2.25",
     "vue-router": "^4.0.13",
     "vuex": "^4.0.2"

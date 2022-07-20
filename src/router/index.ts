@@ -3,7 +3,7 @@ import Layout from '@/layout/index.vue'
 import {store} from '@/store'
 import { loginByToken } from '@/api/Auth'
 
-const routers: Array<RouteRecordRaw> = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     component: () => import('@/views/login/Login.vue'),
@@ -166,7 +166,7 @@ const routers: Array<RouteRecordRaw> = [
         name: 'task',
         component: () => import('@/views/system/Task.vue'),
         meta: {
-          title: 'account',
+          title: 'task',
           icon: 'Clock',
           roles: ['editor'],
         },
@@ -187,29 +187,31 @@ const routers: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: routers,
+  routes: routes,
 })
 
 router.beforeEach((to,from,next)=>{
   const token = localStorage.getItem('token')
-  if(!store.state.authStore.token && !token){
-    if(to.path.startsWith('/login'))
+  if(!store.state.authStore.token && !token){ //如果内存没有token值并且本地没有token跳转去登录页面
+    if(to.path.startsWith('/login')) // 如果要去的路径是login页面保持不变
     next()
     else{
-      console.log('还没有登录');
-      next('/login')
+      // console.log('还没有登录');
+      next('/login') //如果没有要去登录页面，跳去登录页面
     }
-  }else if(!store.state.authStore.token && token){
+  }else if(!store.state.authStore.token && token){ //如果内存当中没有token本地有token，发起token登录请求
     loginByToken(token).then(res=>{
       if(res.data.status){ //状态200进入
         store.commit('authStore/addUserInfo',res.data)
         next()
+      }else{
+        next('/login')
       }
       
-    }) //如果有token发起token登录请求
+    }) 
   }
   else{
-    next()
+    next() // 有token值直接跳转
   }
 })
 
