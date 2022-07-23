@@ -1,16 +1,16 @@
 <!--  -->
 <template>
   <div>
-    <el-row :gutter="24" style="display: flex; align-items: center">
-      <el-col :span="19" :offset="0">
+    <el-row :gutter="20" style="width: 100%;" justify="end" align="middle">
+      <el-col :xs="0" :sm="13" :md="13" :lg="19" :xl="19"> 
         <!-- 面包屑 -->
         <bread-crumb />
       </el-col>
-      <el-col :span="1" :offset="0">
-        <!-- 全屏 -->
-        <screen-full />
+      <el-col :xs="8" :sm="4" :md="4" :lg="1" :xl="1">
+      <!-- 全屏 -->
+        <screen-full></screen-full>
       </el-col>
-      <el-col :span="4">
+      <el-col :xs="16" :sm="7" :md="7" :lg="4" :xl="4">
         <!-- 用户头像 -->
         <user-bar />
       </el-col>

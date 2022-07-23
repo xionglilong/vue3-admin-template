@@ -119,7 +119,7 @@ const openContextMenu = (e:any) =>{
 const closeAllTabs = ()=> {
   store.commit('tabStore/closeAllTabs')
   contextMenuVisible.value = false
-  router.push("/index")
+  router.push('/index')
 }
 
 //关闭其他（包含左，右，选中之外）

@@ -1,6 +1,6 @@
 <!-- -->
 <template>
-  <div>
+  <div class="echarts">
     <el-row :gutter="3">
       <el-col :span="8">
       <line-chart />
@@ -24,4 +24,9 @@ import BarChart from './components/BarChart.vue'
 import MapChart from './components/MapChart.vue'
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.echarts{
+  width: 100%;
+  height: 100%;
+}
+</style>

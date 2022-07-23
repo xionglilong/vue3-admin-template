@@ -1,7 +1,7 @@
 <!--  -->
 <template>
       <template v-for="menu in menus" :key="menu.path">
-        <el-sub-menu v-if="menu.children && menu.children.length > 1" :index="menus.path">
+        <el-sub-menu v-if="menu.children && menu.children.length > 1" :index="menu.path">
           <template #title>
             <el-icon>
               <component :is="menu.meta.icon"/>
