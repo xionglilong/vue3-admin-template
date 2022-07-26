@@ -1,7 +1,7 @@
 <!-- -->
 <template>
   <div>
-    <div ref="main" style="width: 100%; height: 400px; margin: 15px 0; border: 1px solid #333; box-shadow: 5px 5px 5px #888888"></div>
+    <div id="main1" style="width: 100%; height: 400px; margin: 15px 0; border: 1px solid #333; box-shadow: 5px 5px 5px #888888"></div>
   </div>
 </template>
 <script setup lang="ts">
@@ -24,7 +24,14 @@ const init = async () => {
     state.current = res.data.current
   })
   // 1通过dom初始化echarts 2ref虚拟化dom
-  let mychart = echarts.init(main.value)
+  //let mychart = echarts.init(main.value)
+  let mychart = echarts.init(document.getElementById('main1') as HTMLElement)
+  //let mychart = echarts.init(main.value)
+  var ch_credit_in_major =echarts.init(document.getElementById('main1')!);
+
+  window.addEventListener('resize', function () {
+    mychart.resize()
+  })
   // 数据源
   var option = {
     title: {
