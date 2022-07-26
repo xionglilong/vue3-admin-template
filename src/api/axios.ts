@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL:'/api',
+  baseURL:import.meta.env.VITE_URL,
+
 })
 // response 拦截器
 axiosInstance.interceptors.response.use(response=>{
