@@ -39,6 +39,14 @@ export default defineConfig({
     Inspect(),  // 安装Inspect插件
   ],
   server: {
-    port: 8080
+    port: 8080,  // 启动端口
+    open: true,  // 启动后在浏览器打开
+    proxy: {  // 跨域代理
+      '/local_api': {
+        target: 'https://api.imooc-admin.lgdsunday.club/api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/local_api/, '')
+      }
+    }
   }
 })

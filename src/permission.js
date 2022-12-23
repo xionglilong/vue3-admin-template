@@ -28,4 +28,15 @@ router.beforeEach(async (to, from, next) => {
       next('/login')
     }
   }
+
+  if (to.path === '/login'){
+
+  } else {
+    // 如果访问的用户页面，判断用户信息是否获取，若不存在则自动获取
+    if (!UserStore.isUserinfo){
+      await UserStore.getUserinfo()
+    }
+    next()
+  }
+
 })

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import md5 from 'js-md5'  // npm install js-md5
 import request from "@/api/index.ts"
 
 const useUserStore = defineStore('user', () => {
@@ -19,22 +20,25 @@ const useUserStore = defineStore('user', () => {
       })
 
       const isUserinfo = computed(() => {
-        return JSON.stringify(userinfo) !== '{}'
+        return JSON.stringify(userinfo.value) !== '{}'
       })
 
       // function 代替 actions属性，编辑业务逻辑
       function login(data) {
+        const { username, password } = data
+        const password_md5 = md5(password)
         return new Promise((resolve, reject) => {
           // 通过 mock 进行登录
           // request.post('/login', data, { baseURL: '/' })
-          request.post('/login/', data)
+          request.post('/sys/login', {username: username, password: password_md5})
               .then(res => {
                 console.log(res.access)
                 console.log(res.refresh)
-                localStorage.setItem('token', res.access)
-                localStorage.setItem('refresh', res.refresh)  // 刷新码
-                this.token = res.access
-                this.refresh = res.refresh
+                localStorage.setItem('token', res.data.token)
+                // localStorage.setItem('refresh', res.refresh)  // 刷新码
+                this.token = res.data.token
+                // this.refresh = res.refresh
+                
                 // token.value = res.access
                 // refresh.value = res.refresh
 
@@ -46,10 +50,11 @@ const useUserStore = defineStore('user', () => {
         })
       }
 
-      async function getUserInfo(context) {
-        const res = await request.post('/userinfo/')
+      async function getUserinfo(context) {
+        const res = await request.get('/sys/profile')
         this.userinfo = res
         console.log(res)
+        return res
       }
 
       function setAge(data) {
@@ -57,7 +62,7 @@ const useUserStore = defineStore('user', () => {
         age.value = data
       }
 
-      return { username, name, age, token, isLogin, login, getUserInfo, setAge, refresh }
+      return { username, name, age, token, isLogin, login, getUserinfo, setAge, refresh, userinfo, isUserinfo }
     },
     {  // 第三个参数作为其他插件配置
       persist: {

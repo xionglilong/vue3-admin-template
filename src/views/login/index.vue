@@ -45,7 +45,7 @@ import useUserStore from '@/store/user.js'
 let UserStore = useUserStore()
 
 const loginForm = ref({
-  username: 'admin',
+  username: 'super-admin',
   password: '123456'
 })
 

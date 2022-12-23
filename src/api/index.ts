@@ -7,21 +7,50 @@ import useUserStore from '../store/user.js'
 // -------------------------------axios全局配置--------------------------------
 
 // 设置接口超时时间
-axios.defaults.timeout = 60000;
+axios.defaults.timeout = 60000
 
 // 请求地址，这里是动态赋值的的环境变量，下一篇会细讲，这里跳过
 // @ts-ignore
-axios.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL;
+axios.defaults.baseURL = import.meta.env.VITE_APP_BASE_URL
+
+// 跨域请求要求携带cookie
+// axios.defaults.withCredentials = true
+
+
+const toLogin = () => {
+  // useUserStore().logout()
+  router.push({
+    path: '/login',
+    query: {
+      redirect: router.currentRoute.value.path !== '/login' ? router.currentRoute.value.fullPath : undefined,
+    },
+  })
+}
+
+
+// --------------------------------- 创建一个request实例 -----------------------------------
+const request = axios.create({
+  baseURL: import.meta.env.VITE_APP_BASE_API,  // 使用环境变量指定
+  // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_BASE_URL,
+  withCredentials: true,  // 跨域请求是要不要携带cookie
+  timeout: 6000,  // 超时时间
+  responseType: 'json',
+})
+
 
 // http request 全局请求拦截器
-// request.interceptors.request.use(  // 方式二，这里注销掉
-axios.interceptors.request.use(
+request.interceptors.request.use(  // 方式二，这里注销掉
+// axios.interceptors.request.use(
     config => {
       const userStore = useUserStore()
 
+      // api服务器验证
+      config.headers.icode = '9D23F3D57AE2FA3A'
+
       // 如果登录，则传递token
       if (userStore.isLogin && config.headers) {
-        config.headers.Token = userStore.token
+        // config.headers.Token = userStore.token
+        config.headers.Authorization = `Bearer ${userStore.token}`
       }
 
       // 当然也可以直接配置请求头header，这里我们注释掉代码
@@ -46,8 +75,8 @@ axios.interceptors.request.use(
 )
 
 // http response 全局响应拦截器
-// request.interceptors.response.use(  // 方式二，这里注销掉
-axios.interceptors.response.use(
+request.interceptors.response.use(  // 方式二，这里注销掉
+// axios.interceptors.response.use(
     (response) => {
       /**
        * 全局拦截请求发送后返回的200范围的数据，如果数据有报错则在这做全局的错误提示
@@ -85,25 +114,6 @@ axios.interceptors.response.use(
       return Promise.reject(error)
     },
 )
-
-const toLogin = () => {
-  // useUserStore().logout()
-  router.push({
-    path: '/login',
-    query: {
-      redirect: router.currentRoute.value.path !== '/login' ? router.currentRoute.value.fullPath : undefined,
-    },
-  })
-}
-
-
-// --------------------------------- 创建一个request实例 -----------------------------------
-const request = axios.create({
-  baseURL: import.meta.env.VUE_APP_BASE_API,  // 使用环境变量指定
-  // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_BASE_URL,
-  timeout: 6000,  // 超时时间
-  responseType: 'json',
-})
 
 // 导出request实例
 export default request

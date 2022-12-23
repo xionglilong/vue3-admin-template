@@ -4,13 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host --mode developemnt",
+    "dev": "vite --host --mode development",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
+    "blueimp-md5": "^2.19.0",
     "element-plus": "^2.2.26",
+    "js-md5": "^0.7.3",
+    "md5": "^2.3.0",
     "pinia": "^2.0.27",
     "pinia-plugin-persist": "^1.0.0",
     "vue": "^3.2.41",
