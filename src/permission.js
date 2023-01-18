@@ -3,10 +3,11 @@ import pinia from './store/index'
 import useUserStore from '@/store/user'
 // import { storeToRefs } from 'pinia'
 
-let UserStore = useUserStore(pinia)
+let userStore = useUserStore(pinia)
 
 // 白名单
-const whiteList = ['/login', '/']
+export const whiteList = ['/login', '/404', '/401']
+
 /**
  * 路由前置守卫
  */
@@ -14,10 +15,13 @@ router.beforeEach(async (to, from, next) => {
   // 存在 token ，进入主页
   // if (store.state.user.token) {
   // 快捷访问
-  if (UserStore.token) {
+  if (userStore.token) {
+    // 如果是登录页面，跳转到首页
     if (to.path === '/login') {
       next('/')
     } else {
+      // 如果不是登录页面，则向服务器获取用户信息（if语句简写）
+      !userStore.hasUserinfo && await userStore.getUserinfo()
       next()
     }
   } else {
@@ -27,16 +31,6 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next('/login')
     }
-  }
-
-  if (to.path === '/login'){
-
-  } else {
-    // 如果访问的用户页面，判断用户信息是否获取，若不存在则自动获取
-    if (!UserStore.isUserinfo){
-      await UserStore.getUserinfo()
-    }
-    next()
   }
 
 })

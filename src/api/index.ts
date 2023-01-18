@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import router from '../router/index'
 import useUserStore from '../store/user.js'
 
+
 // -------------------------------axios全局配置--------------------------------
 
 // 设置接口超时时间
@@ -30,7 +31,7 @@ const toLogin = () => {
 
 // --------------------------------- 创建一个request实例 -----------------------------------
 const request = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_API,  // 使用环境变量指定
+  baseURL: import.meta.env.VITE_APP_BASE_URL,  // 使用环境变量指定
   // baseURL: import.meta.env.DEV && import.meta.env.VITE_OPEN_PROXY === 'true' ? '/proxy/' : import.meta.env.VITE_APP_BASE_URL,
   withCredentials: true,  // 跨域请求是要不要携带cookie
   timeout: 6000,  // 超时时间
@@ -48,7 +49,7 @@ request.interceptors.request.use(  // 方式二，这里注销掉
       config.headers.icode = '9D23F3D57AE2FA3A'
 
       // 如果登录，则传递token
-      if (userStore.isLogin && config.headers) {
+      if (userStore.hasLogin && config.headers) {
         // config.headers.Token = userStore.token
         config.headers.Authorization = `Bearer ${userStore.token}`
       }
@@ -86,17 +87,26 @@ request.interceptors.response.use(  // 方式二，这里注销掉
       if (response.data.status === 1) {
         if (response.data.error !== '') {
           // 这里做错误提示，如果使用了 element plus 则可以使用 Message 进行提示
-          // ElMessage.error(options)
+          ElMessage.error(response.data.error)
           return Promise.reject(response.data)
         }
-      }
+      } 
       else {
         // toLogin()
       }
-      return Promise.resolve(response.data)
+      return Promise.resolve(response.data.data)  // 第一个data是响应包的数据，第二个data是数据中的键
     },
     (error) => {
       // 响应码不是200范围的包
+
+      // // 返回401认证失败，可能是token过期，也可能是没有登录
+      if (error.response && error.response.data && error.response.data.code === 401) {
+        // ElMessage.error(error.message)
+        const userStore = useUserStore()
+        userStore.logout()  // 退出登录
+      }
+
+
       let message = error.message
       if (message === 'Network Error') {
         message = '后端网络故障'
@@ -107,10 +117,7 @@ request.interceptors.response.use(  // 方式二，这里注销掉
       else if (message.includes('Request failed with status code')) {
         message = `接口${message.substr(message.length - 3)}异常`
       }
-      ElMessage({
-        message,
-        type: 'error',
-      })
+      ElMessage({ message, type: 'error', })
       return Promise.reject(error)
     },
 )

@@ -21,14 +21,14 @@ export default defineConfig({
     AutoImport({
       imports: ['vue'],  // 自动导入Vue相关函数
       resolvers: [
-        ElementPlusResolver(),  // 自动导入Element Plus相关函数
+        ElementPlusResolver(),  // 自动导入Element Plus相关函数，如：ref，reactive，toRef等
         IconsResolver({prefix: 'Icon',}),  // 自动导入图标组件
       ],
       dts: path.resolve(pathSrc, 'auto-imports.d.ts'),
     }),
     Components({
       resolvers: [
-        ElementPlusResolver(),  // 自动导入ElementPlus组件
+        ElementPlusResolver(),  // 自动导入ElementPlus组件，如：ELMessage，ELMessageBox等
         IconsResolver({ enabledCollections: ['ep'], })  // 自动注册图标组件
       ],
 
@@ -40,13 +40,21 @@ export default defineConfig({
   ],
   server: {
     port: 8080,  // 启动端口
-    open: true,  // 启动后在浏览器打开
-    proxy: {  // 跨域代理
+    open: false,  // 启动后在浏览器打开
+    proxy: {  // 跨域代理: https://cn.vitejs.dev/config/server-options.html#server-proxy
       '/local_api': {
         target: 'https://api.imooc-admin.lgdsunday.club/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/local_api/, '')
       }
+    },
+    /**
+    proxy: {
+      '/api': {
+        target: 'https://api.imooc-admin.lgdsunday.club',
+        changeOrigin: true,
+      }
     }
+    */
   }
 })

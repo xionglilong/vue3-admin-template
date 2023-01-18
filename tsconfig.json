@@ -12,7 +12,9 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": true,
-    "allowJs": true
+    // 配置路径别名（这里配置可以方便的在vscode中点击跳转到通过'@'导入的子页面；与项目启动无关）
+    "baseUrl": ".",
+    "paths": {"@/*": ["src/*"]}
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
